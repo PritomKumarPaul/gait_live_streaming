@@ -5,10 +5,15 @@ import numpy as np
 import torchvision.utils as vutils
 import os.path as osp
 from time import strftime, localtime
+from PIL import Image
 
 from torch.utils.tensorboard import SummaryWriter
 from .common import is_list, is_tensor, ts2np, mkdir, Odict, NoOp
 import logging
+
+
+if not hasattr(Image, "ANTIALIAS") and hasattr(Image, "Resampling"):
+    Image.ANTIALIAS = Image.Resampling.LANCZOS
 
 
 class MessageManager:

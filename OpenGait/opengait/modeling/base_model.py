@@ -139,10 +139,12 @@ class BaseModel(MetaModel, nn.Module):
 
         if training and self.engine_cfg['enable_float16']:
             self.Scaler = GradScaler()
-        # self.save_path = osp.join('output/', cfgs['data_cfg']['dataset_name'],
-        #                           cfgs['model_cfg']['model'], self.engine_cfg['save_name'])
-        # self.save_path = "/home/jdy/Gaitdateset/gait_model/Baseline-150000.pt"
-        self.save_path = "/home/jdy/Gaitdateset/gait_model/Baseline-60000.pt"
+        self.save_path = osp.join(
+            'output/',
+            cfgs['data_cfg']['dataset_name'],
+            cfgs['model_cfg']['model'],
+            self.engine_cfg['save_name'],
+        )
 
         self.build_network(cfgs['model_cfg'])
         self.init_parameters()
@@ -284,8 +286,7 @@ class BaseModel(MetaModel, nn.Module):
         else:
             raise ValueError(
                 "Error type for -Restore_Hint-, supported: int or string.")
-        # self._load_ckpt(save_name)
-        self._load_ckpt(self.save_path)
+        self._load_ckpt(save_name)
 
     def fix_BN(self):
         for module in self.modules():

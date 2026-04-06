@@ -29,7 +29,7 @@ track_cfgs = {
     "gait":{
         "dataset": "GREW",
     },
-    "device": "gpu",
+    "device": "gpu" if torch.cuda.is_available() else "cpu",
     "save_result": "True",
 }
 colors = [(255,0,0),(0,255,0),(0,0,255),(0,0,0)]
@@ -54,7 +54,8 @@ def loadckpt(exp):
 
     logger.info("\tFusing model...")
     model = fuse_model(model)
-    model = model.half()
+    if device.type == "cuda":
+        model = model.half()
     return model
 
 exp = get_exp(track_cfgs["model"]["exp_file"], None)
@@ -72,7 +73,7 @@ def track(video_path, video_save_folder):
     trt_file = None
     decoder = None
     device = torch.device("cuda" if track_cfgs["device"] == "gpu" else "cpu")
-    predictor = Predictor(model, exp, trt_file, decoder, device, True)
+    predictor = Predictor(model, exp, trt_file, decoder, device, device.type == "cuda")
 
     cap = cv2.VideoCapture(video_path)
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
@@ -158,7 +159,7 @@ def writeresult(pgdict, video_path, video_save_folder):
     device = torch.device("cuda" if track_cfgs["device"] == "gpu" else "cpu")
     trt_file = None
     decoder = None
-    predictor = Predictor(model, exp, trt_file, decoder, device, True)
+    predictor = Predictor(model, exp, trt_file, decoder, device, device.type == "cuda")
     cap = cv2.VideoCapture(video_path)
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)  # float

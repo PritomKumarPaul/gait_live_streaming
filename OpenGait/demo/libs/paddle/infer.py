@@ -40,13 +40,6 @@ from paddleseg.cvlibs import manager
 # from paddleseg.utils import TimeAverager
 
 
-import paddle.fluid.core as core
-trt_precision_map = {
-    "int8": core.AnalysisConfig.Precision.Int8,
-    "fp32": core.AnalysisConfig.Precision.Float32,
-    "fp16": core.AnalysisConfig.Precision.Half
-}
-
 class DeployConfig:
     def __init__(self, path, vertical_screen):
         with codecs.open(path, 'r', 'utf-8') as file:

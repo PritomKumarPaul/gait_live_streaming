@@ -285,10 +285,14 @@ class BaselineDemo(nn.Module):
         #     self.test_loader = self.get_loader(
         #         cfgs['data_cfg'])
 
-        self.device = torch.cuda.current_device()
-        torch.cuda.set_device(self.device)
-        self.to(device=torch.device(
-            "cuda", self.device))
+        if torch.cuda.is_available():
+            self.device = torch.cuda.current_device()
+            torch.cuda.set_device(self.device)
+            target_device = torch.device("cuda", self.device)
+        else:
+            self.device = torch.device("cpu")
+            target_device = self.device
+        self.to(device=target_device)
 
         # self.train(training)
         restore_hint = self.engine_cfg['restore_hint']
@@ -333,8 +337,8 @@ class BaselineDemo(nn.Module):
 
     def _load_ckpt(self, save_name):
         load_ckpt_strict = self.engine_cfg['restore_ckpt_strict']
-        checkpoint = torch.load(save_name, map_location=torch.device(
-            "cuda"))
+        map_location = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        checkpoint = torch.load(save_name, map_location=map_location)
         model_state_dict = checkpoint['model']
         self.load_state_dict(model_state_dict, strict=load_ckpt_strict)
 
@@ -435,6 +439,5 @@ class BaselineDemo(nn.Module):
             }
         }
         return retval, embed
-
 
 

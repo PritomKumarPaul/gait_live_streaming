@@ -1,7 +1,44 @@
-$ cat .gitignore
-/.idea/
-*/__pycache__
-.DS_Store
-**/.DS_Store
-.DS_Store?
+# Local reference docs
+README_ORIGINAL_UPSTREAM.md
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Editors
+.vscode/
+.idea/
+
+# Environments
+.env
+.venv/
+venv/
+
+# Large checkpoints and archives
+*.pt
+*.pth
+*.pth.tar
+*.ckpt
+*.zip
+*.tar
+*.tar.gz
+
+# Local datasets and private videos
+team2videos/
+casiab/
+casiab-pkl/
+
+# Generated outputs
+OpenGait/demo/output/
+OpenGait/output/*.json
+OpenGait/logs.txt
+
+# Local notebooks and reports
+*.ipynb_checkpoints
+
+# Misc local files seen in this workspace
+=2.2.0
+
+.codex/

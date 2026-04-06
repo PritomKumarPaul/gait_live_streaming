@@ -2,12 +2,19 @@ import os
 import os.path as osp
 import time
 import sys
+import torch
 sys.path.append(os.path.abspath('.') + "/demo/libs/")
 from track import *
 from segment import *
 from recognise import *
 
 def main():
+    print("Torch version:", torch.__version__)
+    print("Torch CUDA build:", torch.version.cuda)
+    print("GPU available:", torch.cuda.is_available())
+    if torch.cuda.is_available():
+        print("GPU device:", torch.cuda.get_device_name(0))
+
     output_dir = "./demo/output/OutputVideos/"
     os.makedirs(output_dir, exist_ok=True)
     current_time = time.localtime()
