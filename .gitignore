@@ -24,21 +24,34 @@ venv/
 *.zip
 *.tar
 *.tar.gz
+OpenGait/demo/checkpoints/seg_model/
 
 # Local datasets and private videos
 team2videos/
+newvideos/
+clean_demo/
+clean_demo_v2/gallery/
+clean_demo_v2/probes/
+clean_demo_v2/raw_gallery_drive/
+clean_demo_v2/raw_probe_drive/
 casiab/
 casiab-pkl/
 
 # Generated outputs
 OpenGait/demo/output/
 OpenGait/output/*.json
+OpenGait/output/*.npz
+OpenGait/output/*.txt
+clean_demo_v2/output/
 OpenGait/logs.txt
 
 # Local notebooks and reports
 *.ipynb_checkpoints
+OpenGait/report/
+gaitbase.pdf
 
 # Misc local files seen in this workspace
 =2.2.0
 
+.codex
 .codex/
