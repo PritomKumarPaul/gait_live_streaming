@@ -66,6 +66,12 @@ pip install yolox
 pip install gradio fastapi uvicorn pyngrok aiortc
 ```
 
+Additional notes:
+- `gradio` is used for the stable offline closed-set demo UI.
+- `fastapi` and `uvicorn` are used for the final live webcam web app.
+- `pyngrok` is used only if you want to create a public tunnel for the FastAPI app.
+- `aiortc` was installed during live-streaming experimentation and transport work.
+
 If needed, verify CUDA:
 
 ```bash
@@ -118,7 +124,7 @@ unzip human_pp_humansegv2_mobile_192x192_inference_model_with_softmax.zip
 From OpenGait v2.0 releases:
 - asset: `pretrained_grew_gaitbase.zip`
 
-Download command:
+Download and extract commands:
 
 ```bash
 cd /home/ppaul11/All-in-One-Gait/OpenGait/demo/checkpoints
@@ -139,7 +145,7 @@ OpenGait/demo/checkpoints/gait_model/GREW/Baseline/GaitBase_DA/checkpoints/GaitB
 From OpenGait v1.1 releases:
 - asset: `pretrained_grew_gaitgl.zip`
 
-Download command:
+Download and extract commands:
 
 ```bash
 cd /home/ppaul11/All-in-One-Gait/OpenGait/demo/checkpoints/gait_model
@@ -167,7 +173,16 @@ Recommended default:
 
 This is the most stable closed-set product in the project.
 
-Run:
+This product uses a **Gradio** interface.
+
+Install requirement reminder:
+
+```bash
+conda activate allinonegait
+pip install gradio
+```
+
+Main launch command:
 
 ```bash
 cd /home/ppaul11/All-in-One-Gait
@@ -263,6 +278,18 @@ CUDA_VISIBLE_DEVICES=1 python live_demo/run_buffered_live_probe.py \
 ## Final Live Webcam Demo
 
 The final live product is the FastAPI-based live webcam demo.
+
+This product uses:
+- **FastAPI** for the backend application
+- **Uvicorn** as the application server
+- optional **pyngrok/ngrok** for public URL exposure
+
+Install requirement reminder:
+
+```bash
+conda activate allinonegait
+pip install fastapi uvicorn pyngrok
+```
 
 Run locally on the server:
 
