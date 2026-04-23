@@ -59,20 +59,41 @@ The `.gitignore` in this repo excludes the important output and local-data paths
 
 ## Environment Setup
 
+The most reliable setup path is the validated step-by-step install below.
+
 ```bash
 cd /home/ppaul11/All-in-One-Gait
 conda create -y -n allinonegait python=3.8
 conda activate allinonegait
+```
+
+Install PyTorch first:
+
+```bash
 pip install --extra-index-url https://download.pytorch.org/whl/cu116 \
   torch==1.12.1+cu116 \
   torchvision==0.13.1+cu116 \
   torchaudio==0.12.1+cu116
+```
+
+Install build helpers and NumPy:
+
+```bash
 pip install Cython==3.0.11 wheel setuptools
 pip install numpy==1.23.5
+```
+
+Install `cython-bbox` before the rest:
+
+```bash
 pip install cython-bbox==0.1.3 --no-build-isolation
-pip install -r requirements.txt
+```
+
+Install the remaining Python packages:
+
+```bash
+pip install filelock filterpy gdown h5py kornia lap loguru motmetrics ninja onnx onnx-simplifier onnxoptimizer onnxruntime opencv-python==4.5.5.64 Pillow prettytable pyyaml scikit-image scikit-learn scipy tabulate tensorboard thop tqdm "visualdl>=2.2.0" gradio fastapi uvicorn pyngrok aiortc imageio-ffmpeg paddlepaddle-gpu paddleseg
 pip install yolox
-pip install gdown
 ```
 
 If `cython-bbox` fails with `gcc: No such file or directory`, install a compiler first:
@@ -88,9 +109,6 @@ Then retry:
 pip install Cython==3.0.11 wheel setuptools
 pip install numpy==1.23.5
 pip install cython-bbox==0.1.3 --no-build-isolation
-pip install -r requirements.txt
-pip install yolox
-pip install gdown
 ```
 
 Additional notes:
@@ -105,7 +123,7 @@ If needed, verify CUDA:
 python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_count())"
 ```
 
-Expected compatible PyTorch stack from `requirements.txt`:
+Expected compatible PyTorch stack:
 
 ```bash
 python -c "import torch, torchvision, torchaudio; print(torch.__version__); print(torchvision.__version__); print(torchaudio.__version__)"
@@ -118,7 +136,7 @@ For the project server with A100 GPUs, the expected torch build is:
 
 Important installation note:
 - install PyTorch before installing `yolox`
-- install `Cython`, `numpy==1.23.5`, and `cython-bbox` before the full requirements install
+- install `Cython`, `numpy==1.23.5`, and `cython-bbox` before the rest of the packages
 
 ## Required External Weights and Assets
 
