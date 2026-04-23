@@ -63,16 +63,34 @@ The `.gitignore` in this repo excludes the important output and local-data paths
 cd /home/ppaul11/All-in-One-Gait
 conda create -y -n allinonegait python=3.8
 conda activate allinonegait
+pip install --extra-index-url https://download.pytorch.org/whl/cu116 \
+  torch==1.12.1+cu116 \
+  torchvision==0.13.1+cu116 \
+  torchaudio==0.12.1+cu116
 pip install Cython==3.0.11 wheel setuptools
+pip install numpy==1.23.5
+pip install cython-bbox==0.1.3 --no-build-isolation
 pip install -r requirements.txt
+pip install yolox
+pip install gdown
 ```
 
-If `cython-bbox` fails during installation, run:
+If `cython-bbox` fails with `gcc: No such file or directory`, install a compiler first:
+
+```bash
+sudo apt update
+sudo apt install -y build-essential
+```
+
+Then retry:
 
 ```bash
 pip install Cython==3.0.11 wheel setuptools
-pip install cython-bbox==0.1.3
+pip install numpy==1.23.5
+pip install cython-bbox==0.1.3 --no-build-isolation
 pip install -r requirements.txt
+pip install yolox
+pip install gdown
 ```
 
 Additional notes:
@@ -97,6 +115,10 @@ For the project server with A100 GPUs, the expected torch build is:
 - `torch==1.12.1+cu116`
 - `torchvision==0.13.1+cu116`
 - `torchaudio==0.12.1+cu116`
+
+Important installation note:
+- install PyTorch before installing `yolox`
+- install `Cython`, `numpy==1.23.5`, and `cython-bbox` before the full requirements install
 
 ## Required External Weights and Assets
 
