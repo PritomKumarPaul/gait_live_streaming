@@ -1,3 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/cu116
 cython-bbox==0.1.3
 filelock
 filterpy
@@ -8,7 +9,7 @@ lap
 loguru
 motmetrics
 ninja
-numpy
+numpy==1.23.5
 onnx
 onnx-simplifier
 onnxoptimizer
@@ -34,9 +35,6 @@ imageio-ffmpeg
 paddlepaddle-gpu
 paddleseg
 yolox
-# torch>=1.10
-# #torchaudio==0.12.1
-# torchvision>=0.10.0
-torch==1.12.1
-torchaudio==0.12.1
-torchvision==0.13.1
+torch==1.12.1+cu116
+torchaudio==0.12.1+cu116
+torchvision==0.13.1+cu116

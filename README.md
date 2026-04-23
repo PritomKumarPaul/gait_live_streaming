@@ -64,8 +64,6 @@ cd /home/ppaul11/All-in-One-Gait
 conda create -y -n allinonegait python=3.8
 conda activate allinonegait
 pip install -r requirements.txt
-pip install yolox
-pip install gradio fastapi uvicorn pyngrok aiortc
 ```
 
 Additional notes:
@@ -79,6 +77,17 @@ If needed, verify CUDA:
 ```bash
 python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_count())"
 ```
+
+Expected compatible PyTorch stack from `requirements.txt`:
+
+```bash
+python -c "import torch, torchvision, torchaudio; print(torch.__version__); print(torchvision.__version__); print(torchaudio.__version__)"
+```
+
+For the project server with A100 GPUs, the expected torch build is:
+- `torch==1.12.1+cu116`
+- `torchvision==0.13.1+cu116`
+- `torchaudio==0.12.1+cu116`
 
 ## Required External Weights and Assets
 
