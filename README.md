@@ -12,9 +12,9 @@ Please also see:
 
 This extension keeps the original tracking, segmentation, and gait-recognition logic, then adds:
 - offline gallery-probe demos for closed-set testing
-- cached gallery workflows for repeated experiments
-- buffered realtime-feasibility testing
-- a final FastAPI-based live webcam demo
+- a stable offline Gradio demo in `clean_demo_v2`
+- a final generic FastAPI-based live webcam demo in `live_demo_clean`
+- older live experiment folders kept for reference
 
 ## Upstream Credit
 
@@ -40,7 +40,9 @@ Important folders:
 - `clean_demo_v2/`
   Stable offline closed-set gallery-probe demo.
 - `live_demo/`
-  Buffered realtime testing, gallery-cache tools, and the final live webcam app.
+  Older buffered realtime testing and intermediate live-demo experiments.
+- `live_demo_clean/`
+  Final generic live webcam streaming demo for any number of gallery identities.
 
 ## What Should Not Be Uploaded
 
@@ -208,76 +210,9 @@ Single-target threshold wrapper:
 MODEL=grew_gaitbase THRESHOLD=0.97 bash clean_demo_v2/run_test1_threshold.sh
 ```
 
-## Gallery Cache Building for Live Demo
+## Final Live Webcam Demo (`live_demo_clean`)
 
-Before the live webcam demo, gallery caches must be built from the selected gallery videos.
-
-For GaitBase:
-
-```bash
-cd /home/ppaul11/All-in-One-Gait
-conda activate allinonegait
-
-python live_demo/build_pritom_coco_gallery.py \
-  --model grew_gaitbase \
-  --pritom-gallery-video /home/ppaul11/All-in-One-Gait/live_demo/gallery/pritom.mp4 \
-  --coco-gallery-video /home/ppaul11/All-in-One-Gait/live_demo/gallery/coco.mp4 \
-  --force
-```
-
-For GaitGL:
-
-```bash
-python live_demo/build_pritom_coco_gallery.py \
-  --model grew_gaitgl \
-  --pritom-gallery-video /home/ppaul11/All-in-One-Gait/live_demo/gallery/pritom.mp4 \
-  --coco-gallery-video /home/ppaul11/All-in-One-Gait/live_demo/gallery/coco.mp4 \
-  --force
-```
-
-Verify caches:
-
-```bash
-sed -n '1,120p' live_demo/cache/pritom_coco_gallery.json
-sed -n '1,120p' live_demo/cache/pritom_coco_gallery_grew_gaitgl.json
-```
-
-## Buffered Realtime Feasibility Testing
-
-This was used to see whether the original pipeline could be pushed close to realtime before building the final live app.
-
-Run:
-
-```bash
-cd /home/ppaul11/All-in-One-Gait
-conda activate allinonegait
-GPU_ID=1 MODEL=grew_gaitbase PROBE=live_demo/prepared_inputs/test1probe_720p30.mp4 \
-  bash live_demo/run_v3_realtime_profile.sh
-```
-
-Or directly:
-
-```bash
-CUDA_VISIBLE_DEVICES=1 python live_demo/run_buffered_live_probe.py \
-  --video live_demo/prepared_inputs/test1probe_720p30.mp4 \
-  --model grew_gaitbase \
-  --process-every-n 5 \
-  --assigned-process-every-n 10 \
-  --detector-input-size 0 \
-  --work-frame-max-side 0 \
-  --min-detection-score 0 \
-  --output-max-side 480 \
-  --silhouette-every-n-processed 1 \
-  --identity-buffer-frames 5 \
-  --max-seconds 30 \
-  --log-every 0 \
-  --quiet \
-  --write-output-video
-```
-
-## Final Live Webcam Demo
-
-The final live product is the FastAPI-based live webcam demo.
+The final live product is the generic FastAPI-based live webcam demo in `live_demo_clean/`.
 
 This product uses:
 - **FastAPI** for the backend application
@@ -291,12 +226,63 @@ conda activate allinonegait
 pip install fastapi uvicorn pyngrok
 ```
 
-Run locally on the server:
+### 1. Add gallery videos
+
+Put at least 2 gallery videos into:
+
+```bash
+/home/ppaul11/All-in-One-Gait/live_demo_clean/gallery
+```
+
+Example:
+
+```bash
+mkdir -p /home/ppaul11/All-in-One-Gait/live_demo_clean/gallery
+cp /path/to/personA.mp4 /home/ppaul11/All-in-One-Gait/live_demo_clean/gallery/
+cp /path/to/personB.mp4 /home/ppaul11/All-in-One-Gait/live_demo_clean/gallery/
+```
+
+The gallery builder will sort the files and assign:
+- first file -> `person1`
+- second file -> `person2`
+- third file -> `person3`
+
+### 2. Build live gallery cache
+
+For GaitBase:
 
 ```bash
 cd /home/ppaul11/All-in-One-Gait
 conda activate allinonegait
-LIVE_DEMO_PUBLIC=0 LIVE_DEMO_GPU_ID=1 LIVE_DEMO_PORT=8010 python live_demo/fastapi_live_webcam_app.py
+
+python live_demo_clean/build_generic_gallery.py \
+  --gallery-dir /home/ppaul11/All-in-One-Gait/live_demo_clean/gallery \
+  --model grew_gaitbase \
+  --force
+```
+
+For GaitGL:
+
+```bash
+python live_demo_clean/build_generic_gallery.py \
+  --gallery-dir /home/ppaul11/All-in-One-Gait/live_demo_clean/gallery \
+  --model grew_gaitgl \
+  --force
+```
+
+Verify cache metadata:
+
+```bash
+sed -n '1,160p' live_demo_clean/cache/generic_gallery.json
+sed -n '1,160p' live_demo_clean/cache/generic_gallery_grew_gaitgl.json
+```
+
+### 3. Run locally on the server
+
+```bash
+cd /home/ppaul11/All-in-One-Gait
+conda activate allinonegait
+LIVE_DEMO_PUBLIC=0 LIVE_DEMO_GPU_ID=1 LIVE_DEMO_PORT=8011 python live_demo_clean/fastapi_live_webcam_app.py
 ```
 
 This starts a server-hosted app. If your laptop can reach the server, you can open it from the laptop browser.
@@ -325,24 +311,46 @@ export NGROK_AUTHTOKEN=YOUR_TOKEN_HERE
 Then run:
 
 ```bash
-LIVE_DEMO_PUBLIC=1 LIVE_DEMO_GPU_ID=1 LIVE_DEMO_PORT=8010 python live_demo/fastapi_live_webcam_app.py
+LIVE_DEMO_PUBLIC=1 LIVE_DEMO_GPU_ID=1 LIVE_DEMO_PORT=8011 python live_demo_clean/fastapi_live_webcam_app.py
 ```
 
 If ngrok is not configured, the app will still run locally on the server but no public URL will be created.
+
+### What the clean live app supports
+
+- any number of gallery identities
+- generic labels `person1`, `person2`, ...
+- gallery mapping display, for example `person1 <- coco.mp4`
+- top-2 similarity score display
+- configurable segmentation warmup
+- configurable identity silhouette buffer
+- explicit `unassigned` reporting when a track disappears before enough silhouettes are collected
+
+## Older Live Experiments
+
+The `live_demo/` folder is still kept in this repository as the older experimentation area.
+
+It includes:
+- buffered realtime feasibility testing
+- older Gradio live attempts
+- earlier fixed-gallery tools
+
+These are useful for reference, but the maintained final live product is now `live_demo_clean/`.
 
 ## Notes on What Worked and What Did Not
 
 ### Worked
 - offline closed-set gallery-probe demo
-- gallery cache building
-- buffered realtime-feasibility testing
-- final FastAPI-based live webcam demo
+- final generic live gallery cache building
+- final FastAPI-based live webcam demo in `live_demo_clean`
 
 ### Did Not Become Final Product
 - probe-only unknown matching with threshold and margin
   Reason: not stable enough for the final deployment story.
 - direct Gradio browser-webcam streaming as the main live backend
   Reason: browser preview and backend frame delivery were unreliable in this environment.
+- older `live_demo/` realtime-feasibility experiments
+  Reason: useful for testing and ablation, but replaced by the cleaner generic `live_demo_clean/` pipeline as the maintained final streaming demo.
 
 ## Attribution Reminder
 

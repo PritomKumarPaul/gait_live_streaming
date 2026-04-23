@@ -251,6 +251,8 @@ class RealtimeGaitPipeline:
         event_lines,
         stage_times: Dict[str, float],
         stage_counts: Dict[str, int],
+        track_seen_counts: Optional[Dict[int, int]] = None,
+        segmentation_start_after_frames: int = 0,
     ):
         detect_start = time.perf_counter()
         outputs, img_info = self.predictor.inference(frame, self.timer)
@@ -276,8 +278,14 @@ class RealtimeGaitPipeline:
                 if tlwh[2] * tlwh[3] <= 10 or vertical:
                     continue
                 active.add(track_id)
+                if track_seen_counts is not None:
+                    track_seen_counts[track_id] = track_seen_counts.get(track_id, 0) + 1
 
-                if track_id not in track_labels and processed_index % max(1, silhouette_every_n_processed) == 0:
+                if (
+                    track_id not in track_labels
+                    and processed_index % max(1, silhouette_every_n_processed) == 0
+                    and (track_seen_counts is None or track_seen_counts.get(track_id, 0) > max(0, int(segmentation_start_after_frames)))
+                ):
                     seg_start = time.perf_counter()
                     saved = save_track_silhouette(
                         frame=frame,

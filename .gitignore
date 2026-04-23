@@ -35,6 +35,7 @@ clean_demo_v2/probes/
 clean_demo_v2/raw_gallery_drive/
 clean_demo_v2/raw_probe_drive/
 live_demo/gallery/
+live_demo_clean/gallery/
 live_demo/prepared_inputs/
 live_demo/Pritomtrain7.mp4
 casiab/
@@ -48,6 +49,8 @@ OpenGait/output/*.txt
 clean_demo_v2/output/
 live_demo/output/
 live_demo/cache/
+live_demo_clean/output/
+live_demo_clean/cache/
 OpenGait/logs.txt
 
 # Local notebooks and reports
