@@ -1,6 +1,7 @@
 cython-bbox==0.1.3
 filelock
 filterpy
+gdown
 h5py
 kornia
 lap
@@ -24,7 +25,15 @@ tensorboard
 thop
 tqdm
 visualdl>=2.2.0
+gradio
+fastapi
+uvicorn
+pyngrok
+aiortc
+imageio-ffmpeg
 paddlepaddle-gpu
+paddleseg
+yolox
 # torch>=1.10
 # #torchaudio==0.12.1
 # torchvision>=0.10.0
