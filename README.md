@@ -63,6 +63,15 @@ The `.gitignore` in this repo excludes the important output and local-data paths
 cd /home/ppaul11/All-in-One-Gait
 conda create -y -n allinonegait python=3.8
 conda activate allinonegait
+pip install Cython==3.0.11 wheel setuptools
+pip install -r requirements.txt
+```
+
+If `cython-bbox` fails during installation, run:
+
+```bash
+pip install Cython==3.0.11 wheel setuptools
+pip install cython-bbox==0.1.3
 pip install -r requirements.txt
 ```
 
