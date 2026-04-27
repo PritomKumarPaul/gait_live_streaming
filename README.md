@@ -59,11 +59,11 @@ The most reliable setup path is the validated step-by-step install below.
 Notes:
 - clone the repo first if you are starting from scratch
 - commands below assume you are already inside the repository root
-- replace `ppaul11` in any absolute path examples with your own username or home path as needed
+- replace `username` in any absolute path examples with your actual Linux username or adjust the home path as needed
 
 ```bash
-git clone https://github.com/PritomKumarPaul/gait_live_streaming.git /home/ppaul11/All-in-One-Gait
-cd /home/ppaul11/All-in-One-Gait
+git clone https://github.com/PritomKumarPaul/gait_live_streaming.git /home/username/All-in-One-Gait
+cd /home/username/All-in-One-Gait
 ```
 
 ```bash
@@ -298,15 +298,15 @@ pip install fastapi uvicorn pyngrok
 Put at least 2 gallery videos into:
 
 ```bash
-/home/ppaul11/All-in-One-Gait/live_demo_clean/gallery
+/home/username/All-in-One-Gait/live_demo_clean/gallery
 ```
 
 Example:
 
 ```bash
-mkdir -p /home/ppaul11/All-in-One-Gait/live_demo_clean/gallery
-cp /path/to/personA.mp4 /home/ppaul11/All-in-One-Gait/live_demo_clean/gallery/
-cp /path/to/personB.mp4 /home/ppaul11/All-in-One-Gait/live_demo_clean/gallery/
+mkdir -p /home/username/All-in-One-Gait/live_demo_clean/gallery
+cp /path/to/personA.mp4 /home/username/All-in-One-Gait/live_demo_clean/gallery/
+cp /path/to/personB.mp4 /home/username/All-in-One-Gait/live_demo_clean/gallery/
 ```
 
 The gallery builder will sort the files and assign:
@@ -322,7 +322,7 @@ For GaitBase:
 conda activate allinonegait
 
 python live_demo_clean/build_generic_gallery.py \
-  --gallery-dir /home/ppaul11/All-in-One-Gait/live_demo_clean/gallery \
+  --gallery-dir /home/username/All-in-One-Gait/live_demo_clean/gallery \
   --model grew_gaitbase \
   --force
 ```
@@ -331,7 +331,7 @@ For GaitGL:
 
 ```bash
 python live_demo_clean/build_generic_gallery.py \
-  --gallery-dir /home/ppaul11/All-in-One-Gait/live_demo_clean/gallery \
+  --gallery-dir /home/username/All-in-One-Gait/live_demo_clean/gallery \
   --model grew_gaitgl \
   --force
 ```
