@@ -7,8 +7,7 @@ It is built on top of:
 - the upstream **OpenGait** framework
 
 Please also see:
-- offline/stable project repo: [PritomKumarPaul/gait_tracking](https://github.com/PritomKumarPaul/gait_tracking)
-- upstream OpenGait releases: [https://github.com/ShiqiYu/OpenGait/releases](https://github.com/ShiqiYu/OpenGait/releases)
+- upstream OpenGait releases: [https://github.com/ShiqiYu/OpenGait](https://github.com/ShiqiYu/OpenGait)
 
 This extension keeps the original tracking, segmentation, and gait-recognition logic, then adds:
 - offline gallery-probe demos for closed-set testing
@@ -25,10 +24,6 @@ This work depends heavily on the original ideas, code, and checkpoints from:
 - **PaddleSeg**
 
 Please keep the original upstream attribution intact when using or presenting this project.
-
-Useful local reference:
-- upstream README copy: `README_ORIGINAL_UPSTREAM.md`
-- offline project README: `README.md`
 
 ## What This Repository Contains
 
@@ -62,8 +57,14 @@ The `.gitignore` in this repo excludes the important output and local-data paths
 The most reliable setup path is the validated step-by-step install below.
 
 Notes:
+- clone the repo first if you are starting from scratch
 - commands below assume you are already inside the repository root
 - replace `ppaul11` in any absolute path examples with your own username or home path as needed
+
+```bash
+git clone https://github.com/PritomKumarPaul/gait_live_streaming.git /home/ppaul11/All-in-One-Gait
+cd /home/ppaul11/All-in-One-Gait
+```
 
 ```bash
 conda create -y -n allinonegait python=3.8
