@@ -61,8 +61,11 @@ The `.gitignore` in this repo excludes the important output and local-data paths
 
 The most reliable setup path is the validated step-by-step install below.
 
+Notes:
+- commands below assume you are already inside the repository root
+- replace `ppaul11` in any absolute path examples with your own username or home path as needed
+
 ```bash
-cd /home/ppaul11/All-in-One-Gait
 conda create -y -n allinonegait python=3.8
 conda activate allinonegait
 ```
@@ -89,11 +92,16 @@ Install `cython-bbox` before the rest:
 pip install cython-bbox==0.1.3 --no-build-isolation
 ```
 
+Install `pycocotools` explicitly:
+
+```bash
+pip install pycocotools==2.0.7
+```
+
 Install the remaining Python packages:
 
 ```bash
-pip install filelock filterpy gdown h5py kornia lap loguru motmetrics ninja onnx onnx-simplifier onnxoptimizer onnxruntime opencv-python==4.5.5.64 Pillow prettytable pyyaml scikit-image scikit-learn scipy tabulate tensorboard thop tqdm "visualdl>=2.2.0" gradio fastapi uvicorn pyngrok aiortc imageio-ffmpeg paddlepaddle-gpu paddleseg
-pip install yolox
+pip install filelock filterpy gdown h5py kornia lap loguru motmetrics ninja onnx onnxoptimizer onnxruntime opencv-python==4.5.5.64 Pillow prettytable pyyaml scikit-image scikit-learn scipy tabulate tensorboard thop tqdm "visualdl>=2.2.0" gradio fastapi uvicorn pyngrok aiortc imageio-ffmpeg paddlepaddle-gpu paddleseg
 ```
 
 If `cython-bbox` fails with `gcc: No such file or directory`, install a compiler first:
@@ -116,6 +124,7 @@ Additional notes:
 - `fastapi` and `uvicorn` are used for the final live webcam web app.
 - `pyngrok` is used only if you want to create a public tunnel for the FastAPI app.
 - `aiortc` was installed during live-streaming experimentation and transport work.
+- do not install the PyPI `yolox` package for this repo; the project uses the bundled local YOLOX code under `OpenGait/demo/libs/yolox`
 
 If needed, verify CUDA:
 
@@ -135,8 +144,8 @@ For the project server with A100 GPUs, the expected torch build is:
 - `torchaudio==0.12.1+cu116`
 
 Important installation note:
-- install PyTorch before installing `yolox`
-- install `Cython`, `numpy==1.23.5`, and `cython-bbox` before the rest of the packages
+- install PyTorch first
+- install `Cython`, `numpy==1.23.5`, `cython-bbox`, and `pycocotools` before the rest of the packages
 
 ## Required External Weights and Assets
 
@@ -156,8 +165,8 @@ OpenGait/demo/checkpoints/bytetrack_model/bytetrack_x_mot17.pth.tar
 Download command used in the original upstream project:
 
 ```bash
-cd /home/ppaul11/All-in-One-Gait/OpenGait/demo/checkpoints/bytetrack_model
 pip install --upgrade --no-cache-dir gdown
+cd OpenGait/demo/checkpoints/bytetrack_model
 gdown https://drive.google.com/uc?id=1P4mY0Yyd3PPTybgZkjMYhFri88nTmJX5
 ```
 
@@ -172,7 +181,7 @@ OpenGait/demo/checkpoints/seg_model/human_pp_humansegv2_mobile_192x192_inference
 Download command:
 
 ```bash
-cd /home/ppaul11/All-in-One-Gait/OpenGait/demo/checkpoints
+cd OpenGait/demo/checkpoints
 mkdir -p seg_model
 cd seg_model
 wget https://paddleseg.bj.bcebos.com/dygraph/pp_humanseg_v2/human_pp_humansegv2_mobile_192x192_inference_model_with_softmax.zip
@@ -187,7 +196,7 @@ From OpenGait v2.0 releases:
 Download and extract commands:
 
 ```bash
-cd /home/ppaul11/All-in-One-Gait/OpenGait/demo/checkpoints
+cd OpenGait/demo/checkpoints
 mkdir -p gait_model
 cd gait_model
 wget https://github.com/ShiqiYu/OpenGait/releases/download/v2.0/pretrained_grew_gaitbase.zip
@@ -208,7 +217,7 @@ From OpenGait v1.1 releases:
 Download and extract commands:
 
 ```bash
-cd /home/ppaul11/All-in-One-Gait/OpenGait/demo/checkpoints/gait_model
+cd OpenGait/demo/checkpoints/gait_model
 wget https://github.com/ShiqiYu/OpenGait/releases/download/v1.1/pretrained_grew_gaitgl.zip
 unzip pretrained_grew_gaitgl.zip
 ```
@@ -245,7 +254,6 @@ pip install gradio
 Main launch command:
 
 ```bash
-cd /home/ppaul11/All-in-One-Gait
 conda activate allinonegait
 python clean_demo_v2/gradio_app.py
 ```
@@ -310,7 +318,6 @@ The gallery builder will sort the files and assign:
 For GaitBase:
 
 ```bash
-cd /home/ppaul11/All-in-One-Gait
 conda activate allinonegait
 
 python live_demo_clean/build_generic_gallery.py \
@@ -338,7 +345,6 @@ sed -n '1,160p' live_demo_clean/cache/generic_gallery_grew_gaitgl.json
 ### 3. Run locally on the server
 
 ```bash
-cd /home/ppaul11/All-in-One-Gait
 conda activate allinonegait
 LIVE_DEMO_PUBLIC=0 LIVE_DEMO_GPU_ID=1 LIVE_DEMO_PORT=8011 python live_demo_clean/fastapi_live_webcam_app.py
 ```
